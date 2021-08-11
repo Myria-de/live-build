@@ -1,5 +1,5 @@
 # live-build
-Build Ubuntu live-systems with Debian scripts
+Build Ubuntu or Linux Mint custom live-systems with Debian scripts
 
 Based on Debian live-build_20190311.
 
