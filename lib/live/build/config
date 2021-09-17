@@ -1394,7 +1394,7 @@ then
 
 	case "${LB_INITRAMFS}" in
 		live-boot)
-            ###ubuntu boot scripts
+            ###ubuntu boot scripts include casper package
             echo "casper" >> config/package-lists/live.list.chroot
 			#echo "live-boot" >> config/package-lists/live.list.chroot
 			#echo "live-config" >> config/package-lists/live.list.chroot
