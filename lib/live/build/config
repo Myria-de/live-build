@@ -119,6 +119,7 @@ USAGE="${PROGRAM}   [--apt apt|aptitude]\n\
 \t    [--swap-file-size MB]\n\
 \t    [--tasksel apt|aptitude|tasksel]\n\
 \t    [--uefi-secure-boot auto|enable|disable]\n\
+\t    [--union-file-system overlay|aufs]\n\
 \t    [--updates true|false]\n\
 \t    [--backports true|false]\n\
 \t    [--verbose]\n\
@@ -152,7 +153,7 @@ Local_arguments ()
 		loadlin:,win32-loader:,source:,source-images:,breakpoints,conffile:,debug,force,
 		help,ignore-system-defaults,quiet,usage,verbose,version,bootstrap-qemu-static:,bootstrap-qemu-arch:,
 		uefi-secure-boot:,
-		bootstrap-qemu-exclude:"
+		bootstrap-qemu-exclude:,union-file-system:"
 	# Remove spaces added by indentation
 	LONG_OPTIONS="$(echo ${LONG_OPTIONS} | tr -d ' ')"
 	ARGUMENTS="$(getopt --longoptions ${LONG_OPTIONS} --name="${PROGRAM}" --options a:f:d:m:l:k:p:b:e:s:c:huv --shell sh -- "${@}")"
@@ -471,6 +472,11 @@ Local_arguments ()
 				LB_UPDATES="${2}"
 				shift 2
 				;;
+			--union-file-system)
+				LB_UNION_FILESYSTEM="${2}"
+				shift 2
+				;;
+
 
 			--backports)
 				LB_BACKPORTS="${2}"
@@ -1388,8 +1394,10 @@ then
 
 	case "${LB_INITRAMFS}" in
 		live-boot)
-			echo "live-boot" > config/package-lists/live.list.chroot
-			echo "live-config" >> config/package-lists/live.list.chroot
+            ###ubuntu boot scripts
+            echo "casper" >> config/package-lists/live.list.chroot
+			#echo "live-boot" >> config/package-lists/live.list.chroot
+			#echo "live-config" >> config/package-lists/live.list.chroot
 
 			case "${LB_INITSYSTEM}" in
 				none)
@@ -1417,6 +1425,7 @@ cat > config/build << EOF
 [Image]
 Architecture: ${LB_ARCHITECTURES}
 Archive-Areas: ${LB_ARCHIVE_AREAS}
+Parent-Archive-Areas: ${LB_ARCHIVE_AREAS}
 Distribution: ${LB_DISTRIBUTION}
 Mirror-Bootstrap: ${LB_MIRROR_BOOTSTRAP}
 EOF

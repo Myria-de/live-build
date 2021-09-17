@@ -59,7 +59,7 @@ New_configuration ()
 			;;
 
 		*)
-			LB_ARCHIVE_AREAS="${LB_ARCHIVE_AREAS:-main}"
+			LB_ARCHIVE_AREAS="${LB_ARCHIVE_AREAS:-main universe multiverse}"
 			;;
 	esac
 
@@ -103,7 +103,7 @@ Set_defaults ()
 				;;
 
 			*)
-				LB_MODE="${LB_MODE:-debian}"
+				LB_MODE="${LB_MODE:-ubuntu}"
 				;;
 		esac
 	else
@@ -124,7 +124,7 @@ Set_defaults ()
 			;;
 
 		*)
-			LB_DISTRIBUTION="${LB_DISTRIBUTION:-stretch}"
+			LB_DISTRIBUTION="${LB_DISTRIBUTION:-focal}"
 			LB_DERIVATIVE="false"
 			;;
 	esac
@@ -166,7 +166,7 @@ Set_defaults ()
 	# Setting apt pipeline
 	# LB_APT_PIPELINE
 
-	APT_OPTIONS="${APT_OPTIONS:---yes}"
+	APT_OPTIONS="${APT_OPTIONS:---yes --allow-remove-essential}"
 	APTITUDE_OPTIONS="${APTITUDE_OPTIONS:---assume-yes}"
 
 	BZIP2_OPTIONS="${BZIP2_OPTIONS:--6}"
@@ -334,6 +334,12 @@ Set_defaults ()
 			LB_PARENT_MIRROR_BOOTSTRAP="${LB_PARENT_MIRROR_BOOTSTRAP:-http://deb.debian.org/debian/}"
 			LB_MIRROR_BOOTSTRAP="${LB_MIRROR_BOOTSTRAP:-http://cdn.archive.progress-linux.org/packages/}"
 			;;
+        *)
+			LB_MIRROR_BOOTSTRAP="${LB_MIRROR_BOOTSTRAP:-http://archive.ubuntu.com/ubuntu/}"
+			LB_PARENT_MIRROR_BOOTSTRAP="${LB_PARENT_MIRROR_BOOTSTRAP:-${LB_MIRROR_BOOTSTRAP}}"
+            ;;
+
+
 	esac
 
 	LB_PARENT_MIRROR_CHROOT="${LB_PARENT_MIRROR_CHROOT:-${LB_PARENT_MIRROR_BOOTSTRAP}}"
@@ -350,6 +356,11 @@ Set_defaults ()
 			LB_PARENT_MIRROR_CHROOT_SECURITY="${LB_PARENT_MIRROR_CHROOT_SECURITY:-http://security.debian.org/}"
 			LB_MIRROR_CHROOT_SECURITY="${LB_MIRROR_CHROOT_SECURITY:-${LB_MIRROR_CHROOT}}"
 			;;
+        *)
+			LB_MIRROR_CHROOT_SECURITY="${LB_MIRROR_CHROOT_SECURITY:-http://security.ubuntu.com/ubuntu/}"
+			LB_PARENT_MIRROR_CHROOT_SECURITY="${LB_PARENT_MIRROR_CHROOT_SECURITY:-${LB_MIRROR_CHROOT_SECURITY}}"
+
+            ;;
 	esac
 
 	# Setting mirror which ends up in the image
@@ -363,6 +374,10 @@ Set_defaults ()
 			LB_PARENT_MIRROR_BINARY="${LB_PARENT_MIRROR_BINARY:-http://deb.debian.org/debian/}"
 			LB_MIRROR_BINARY="${LB_MIRROR_BINARY:-${LB_MIRROR_CHROOT}}"
 			;;
+        *)
+			LB_PARENT_MIRROR_BINARY="${LB_PARENT_MIRROR_BINARY:-http://archive.ubuntu.com/ubuntu/}"
+			LB_MIRROR_BINARY="${LB_MIRROR_BINARY:-${LB_MIRROR_CHROOT}}"
+            ;;
 	esac
 
 	# Setting security mirror which ends up in the image
@@ -376,6 +391,10 @@ Set_defaults ()
 			LB_PARENT_MIRROR_BINARY_SECURITY="${LB_PARENT_MIRROR_BINARY_SECURITY:-http://security.debian.org/}"
 			LB_MIRROR_BINARY_SECURITY="${LB_MIRROR_BINARY_SECURITY:-${LB_MIRROR_CHROOT}}"
 			;;
+        *)
+			LB_MIRROR_BINARY_SECURITY="${LB_MIRROR_BINARY_SECURITY:-http://security.ubuntu.com/ubuntu/}"
+			LB_PARENT_MIRROR_BINARY_SECURITY="${LB_PARENT_MIRROR_BINARY_SECURITY:-${LB_MIRROR_BINARY_SECURITY}}"
+            ;;
 	esac
 
 	case "${LB_MODE}" in
@@ -396,13 +415,13 @@ Set_defaults ()
 	LB_CHROOT_FILESYSTEM="${LB_CHROOT_FILESYSTEM:-squashfs}"
 
 	# Setting union filesystem
-	LB_UNION_FILESYSTEM="${LB_UNION_FILESYSTEM:-overlay}"
+	LB_UNION_FILESYSTEM="${LB_UNION_FILESYSTEM:-aufs}"
 
 	# Setting interactive shell/X11/Xnest
 	LB_INTERACTIVE="${LB_INTERACTIVE:-false}"
 
 	# Setting keyring packages
-	LB_KEYRING_PACKAGES="${LB_KEYRING_PACKAGES:-debian-archive-keyring}"
+	LB_KEYRING_PACKAGES="${LB_KEYRING_PACKAGES:-ubuntu-keyring}"
 
 	# Setting linux flavour string
 	case "${LB_ARCHITECTURES}" in
@@ -423,7 +442,7 @@ Set_defaults ()
 			;;
 
 		amd64)
-			LB_LINUX_FLAVOURS="${LB_LINUX_FLAVOURS:-amd64}"
+			LB_LINUX_FLAVOURS="${LB_LINUX_FLAVOURS:-generic}"
 			;;
 
 		i386)
@@ -476,7 +495,7 @@ Set_defaults ()
 	esac
 
 	# Set linux packages
-	LB_LINUX_PACKAGES="${LB_LINUX_PACKAGES:-linux-image}"
+	LB_LINUX_PACKAGES="${LB_LINUX_PACKAGES:-linux}"
 
 	# Setting security updates option
 	case "${LB_PARENT_DISTRIBUTION}" in
@@ -551,10 +570,10 @@ Set_defaults ()
 	esac
 
 	# Setting compression
-	LB_COMPRESSION="${LB_COMPRESSION:-none}"
+	LB_COMPRESSION="${LB_COMPRESSION:-lz4}"
 
 	# Setting zsync
-	LB_ZSYNC="${LB_ZSYNC:-true}"
+	LB_ZSYNC="${LB_ZSYNC:-false}"
 
 	# Setting chroot option
 	LB_BUILD_WITH_CHROOT="${LB_BUILD_WITH_CHROOT:-true}"
@@ -594,8 +613,8 @@ Set_defaults ()
 	# Setting boot parameters
 	case "${LB_INITRAMFS}" in
 		live-boot)
-			LB_BOOTAPPEND_LIVE="${LB_BOOTAPPEND_LIVE:-boot=live components quiet splash}"
-			LB_BOOTAPPEND_LIVE_FAILSAFE="${LB_BOOTAPPEND_LIVE_FAILSAFE:-boot=live components memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=normal}"
+			LB_BOOTAPPEND_LIVE="${LB_BOOTAPPEND_LIVE:-boot=casper hostname=ubuntu username=ubuntu debian-installer/language=de keyboard-configuration/layoutcode=de fsck.mode=skip}"
+			LB_BOOTAPPEND_LIVE_FAILSAFE="${LB_BOOTAPPEND_LIVE_FAILSAFE:-boot=casper hostname=ubuntu username=ubuntu debian-installer/language=de keyboard-configuration/layoutcode=de fsck.mode=skip nomodeset}"
 			;;
 
 		none)

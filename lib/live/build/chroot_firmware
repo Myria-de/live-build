@@ -59,9 +59,13 @@ mkdir -p cache/contents.chroot
 
 FIRMWARE_PACKAGES=""
 
-#_CONTENTS="$(for _PARENT_ARCHIVE_AREA in ${LB_PARENT_ARCHIVE_AREAS}; do echo ${LB_PARENT_MIRROR_CHROOT}/dists/${LB_PARENT_DISTRIBUTION}/${_PARENT_ARCHIVE_AREA}/Contents-${LB_ARCHITECTURES}.gz; done)"
-# ubuntu
-_CONTENTS="$(for _PARENT_ARCHIVE_AREA in ${LB_PARENT_ARCHIVE_AREAS}; do echo ${LB_PARENT_MIRROR_CHROOT}/dists/${LB_PARENT_DISTRIBUTION}/Contents-${LB_ARCHITECTURES}.gz; done)"
+	if [ "${LB_MODE}" != "debian" ]
+	then
+	# ubuntu
+	_CONTENTS="$(for _PARENT_ARCHIVE_AREA in ${LB_PARENT_ARCHIVE_AREAS}; do echo ${LB_PARENT_MIRROR_CHROOT}/dists/${LB_PARENT_DISTRIBUTION}/Contents-${LB_ARCHITECTURES}.gz; done)"
+	else
+	_CONTENTS="$(for _PARENT_ARCHIVE_AREA in ${LB_PARENT_ARCHIVE_AREAS}; do echo ${LB_PARENT_MIRROR_CHROOT}/dists/${LB_PARENT_DISTRIBUTION}/${_PARENT_ARCHIVE_AREA}/Contents-${LB_ARCHITECTURES}.gz; done)"
+	fi
 
 rm -f cache/contents.chroot/contents.${LB_PARENT_DISTRIBUTION}.${LB_ARCHITECTURES}
 
@@ -111,9 +115,16 @@ do
 	echo $(echo ${_PACKAGE} | awk -F/ '{ print $NF }') >> chroot/root/packages.chroot
 done
 
-# Ubuntu remove *.txt
+# Ubuntu delete invalid lines
 sed -i '/.txt/d' chroot/root/packages.chroot
 sed -i '/atmel-firmware/d' chroot/root/packages.chroot
+
+if [ "${LB_DISTRIBUTION}" = 'hirsute' ]
+then
+sed -i '/Pi/d' chroot/root/packages.chroot
+sed -i '/firmware-sof-signed/d' chroot/root/packages.chroot
+#sed -i '/nvidia-kernel-common-465/d' chroot/root/packages.chroot
+fi
 
 # Some known licenses required to be accepted
 if echo ${LB_PARENT_ARCHIVE_AREAS} | grep -qs "non-free"
