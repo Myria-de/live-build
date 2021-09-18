@@ -11,9 +11,7 @@ Wer sich ein maßgeschneidertes Live-System wünscht, kann es selbst erstellen. 
 
 Bei diesem Projekt geht es um Live-Systeme, die sich vielfältig nutzen lassen. Es handelt sich nicht um aktualisierte Installationssysteme, obwohl auch das mit den Scripten möglich ist.
 
-Ein Build-System, das aus einer Reihe von Bash-Scripten besteht, ist unter dem Namen „live-build“ in den Standard-Repositorien von Ubuntu und Linux Mint enthalten. Das Paket ist jedoch veraltet und unterstützt beispielsweise den Bootloader Grub nicht. Wir haben ein neueres Paket, das von Debian stammt, für Ubuntu 20.04 und Linux Mint 20 angepasst. Laden Sie die Version nach einem Klick auf "Releases" herunter und installieren Sie das deb-Paket.
-
-Die Version wurde unter Ubuntu 18.04, 20.04 und Linux Mint 20 gestestet und kann Systeme auf der Basis von Ubuntu 20.04 erstellen.
+Ein Build-System, das aus einer Reihe von Bash-Scripten besteht, ist unter dem Namen „live-build“ in den Standard-Repositorien von Ubuntu und Linux Mint enthalten. Das Paket ist jedoch veraltet und unterstützt beispielsweise den Bootloader Grub nicht. Wir haben ein neueres Paket, das von Debian stammt, für Ubuntu und Linux Mint angepasst. Die Version wurde unter Ubuntu 18.04, 20.04 und Linux Mint 20 gestestet und kann Systeme auf der Basis von Ubuntu 20.04 erstellen. Laden Sie die Version nach einem Klick auf "Releases" herunter und installieren Sie das deb-Paket.
 
 Danach erstellt man ein Arbeitsverzeichnis, beispielsweise "~/live-build". In diesem Verzeichnis lässt sich das Script lb starten, das drei Haupoptionen kennt:
 
