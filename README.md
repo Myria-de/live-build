@@ -3,9 +3,9 @@ Build Ubuntu or Linux Mint custom live-systems with Debian scripts
 
 Based on Debian live-build_20190311.
 
-Source: https://salsa.debian.org/live-team/live-build
+Original-Source: https://salsa.debian.org/live-team/live-build
 
-Documentation: https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html
+Original-Documentation: https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html
 
 Wer sich ein maßgeschneidertes Live-System wünscht, kann es selbst erstellen. Auf der Basis von Ubuntu lässt es sich mit beliebigen Desktop-Umgebungen, Anwendungen und Tools ausstatten oder es zeigt als besonders schlankes System nach dem Start nur ein Terminal.
 
