@@ -28,4 +28,4 @@ Damit werden alle Ordner entfernt, bis auf "cache" und "config". In „.build“
 
 Im Ordner "examples" liegen einige Beispiele. Kopieren Sie beispielsweise die Datei "lb_build.sh" aus dem Ordner "examples/Kubuntu" in ein neues Arbeitsverzeichnins und starten Sie das Bash-Script im Terminal. Es erstellt eine angepasste Konfiguration inklusive der Paketliste für ein Kubuntu-System. Danach startet man *lb build*.
 
-In die Paketliste in der Datei "config/package-lists/extra.list.chroot" kann man zusätzliche Pakete einbauen und das System danach neu erstellen.
+In die Paketliste in der Datei "config/package-lists/extra.list.chroot" beziehungsweise in das Konfigurationsscript kann man zusätzliche Pakete einbauen und das System danach neu erstellen.
