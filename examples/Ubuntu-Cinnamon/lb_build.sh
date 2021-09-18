@@ -81,7 +81,7 @@ set -e
 EOF
 chmod 755 config/hooks/live/fix-binary.binary
 
-# Cinnamon Session einstellen
+# Session einstellen
 cat <<END > config/hooks/live/fix-xsession.chroot
 #!/bin/sh
 set -e
