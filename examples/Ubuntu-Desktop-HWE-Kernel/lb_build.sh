@@ -4,13 +4,13 @@ sudo lb config \
 --distribution focal \
 --archive-areas "main universe multiverse" \
 --binary-images iso-hybrid \
---linux-flavours "generic" \
+--linux-flavours "generic-hwe-20.04" \
 --linux-packages "linux" \
 --parent-distribution "focal" \
 --parent-debian-installer-distribution focal \
 --parent-archive-areas "main universe multiverse" \
 --apt-options "--yes --allow-remove-essential" \
---apt-recommends "false" \
+--apt-recommends "true" \
 --bootappend-live "boot=casper hostname=ubuntu username=ubuntu debian-installer/language=de keyboard-configuration/layoutcode=de fsck.mode=skip" \
 --bootappend-live-failsafe "boot=casper hostname=ubuntu username=ubuntu debian-installer/language=de keyboard-configuration/layoutcode=de fsck.mode=skip nomodeset" \
 --iso-application "Ubuntu live" \
@@ -32,31 +32,58 @@ sudo lb config \
 
 ## netplan dhcp ##
 ## Namen der Netzwerkschnittstelle bitt anpassen ###
-cat <<END > config/hooks/live/01-network-dhcp.chroot
-#!/bin/sh
-cat <<EOF > /etc/netplan/01-network-dhcp.yaml
-network:
- ethernets:
-  enp0s3:
-   dhcp4: true
- version: 2
-EOF
-END
-chmod 755 config/hooks/live/01-network-dhcp.chroot
+#cat <<END > config/hooks/live/01-network-dhcp.chroot
+##!/bin/sh
+#cat <<EOF > /etc/netplan/01-network-dhcp.yaml
+#network:
+# ethernets:
+#  enp0s3:
+#   dhcp4: true
+# version: 2
+#EOF
+#END
+#chmod 755 config/hooks/live/01-network-dhcp.chroot
+
 
 ## Ubuntu Desktop mit NetworkManager
-##cat <<END > config/hooks/live/01-network-manager.chroot
-##!/bin/sh
-##cat << EOF > /etc/netplan/01-network-manager-all.yaml
-##network:
-##  version: 2
-##  renderer: NetworkManager
-##EOF
-##END
-##chmod 755 config/hooks/live/01-network-manager.chroot
+cat <<END > config/hooks/live/01-network-manager.chroot
+#!/bin/sh
+cat << EOF > /etc/netplan/01-network-manager-all.yaml
+network:
+  version: 2
+  renderer: NetworkManager
+EOF
+END
+chmod 755 config/hooks/live/01-network-manager.chroot
 
-# ubuntu casper boot scripts & Midnight Commander
+# Deutsche Sprachpakete
+cat <<EOF > config/hooks/live/language-packs.chroot
+#!/bin/sh
+apt install -y \$(check-language-support -l de)
+EOF
+chmod 755 config/hooks/live/language-packs.chroot
+
+# evtl. vorhandene Kopie von Kernel und Initrd entfernen
+cat <<EOF > config/hooks/live/fix-binary.binary
+#!/bin/sh
+set -e
+ if [ -e binary/casper/vmlinuz-* ]
+ then
+  rm casper/vmlinuz-*
+ fi
+ if [ -e binary/casper/initrd.img-* ]
+ then
+  rm casper/initrd.img-*
+ fi 
+EOF
+chmod 755 config/hooks/live/fix-binary.binary
+
+# Paketlist Ubuntu casper boot scripts & Midnight Commander & Ubuntu-Desktop
+# durch --apt-recommends "true"
+# werden fast alle erforderlichen Pakete automatisch installiert
+# inklusive LibreOffice, Thunderbird und Firefox
 cat <<EOF > config/package-lists/extra.list.chroot
 liblz4-tool
 mc
+ubuntu-desktop
 EOF
